@@ -1,0 +1,153 @@
+Estadísticas: Cambio Climático y Emisiones Globales 2024
+
+Fuente: IPCC, NASA, NOAA, Global Carbon Project
+
+TEMPERATURA GLOBAL:
+
+- Aumento temperatura global desde era preindustrial: +1.2°C (2024)
+- Trayectoria actual: +2.7°C para 2100
+- Meta Acuerdo de París: limitar a +1.5°C
+- Cada 0.1°C adicional: impacto significativo en eventos extremos
+
+Temperaturas Récord:
+- 2023: año más cálido registrado (superando a 2016)
+- 10 años más calientes: todos después de 2010
+- Tasa de calentamiento: 0.18°C por década (últimos 40 años)
+
+EMISIONES DE CO2:
+
+Emisiones Globales 2023:
+- Total: 37.4 gigatoneladas (Gt) CO2
+- Tendencia: +1.1% respecto a 2022
+- Emisiones acumuladas desde 1850: 2,550 Gt CO2
+
+Por País (Top 5 Emisores 2023):
+1. China: 11.4 Gt (30.5%)
+2. Estados Unidos: 5.0 Gt (13.4%)
+3. India: 2.9 Gt (7.7%)
+4. Rusia: 1.8 Gt (4.8%)
+5. Japón: 1.1 Gt (2.9%)
+
+Per Cápita (toneladas CO2/persona/año):
+- Qatar: 37.6 t
+- Kuwait: 25.8 t
+- Arabia Saudita: 19.3 t
+- Estados Unidos: 15.0 t
+- China: 8.0 t
+- Unión Europea: 6.7 t
+- India: 2.1 t
+- Promedio Mundial: 4.7 t
+
+Objetivo Net-Zero:
+- Para 1.5°C: reducir emisiones 45% para 2030, net-zero para 2050
+- Actualmente: 140 países comprometidos con net-zero (90% de emisiones globales)
+- Pero trayectoria actual: +2.7°C
+
+SECTORES EMISORES:
+
+Desglose por Sector:
+- Energía (electricidad y calor): 42%
+- Agricultura y uso de suelo: 24%
+- Industria: 19%
+- Transporte: 16%
+- Edificios: 6%
+
+Subsectores Clave:
+- Producción de cemento: 8% de emisiones globales
+- Producción de acero: 7%
+- Aviación: 2.5%
+- Transporte marítimo: 3%
+
+IMPACTOS OBSERVADOS:
+
+Nivel del Mar:
+- Aumento desde 1900: 21-24 cm
+- Tasa actual: 3.7 mm/año (acelerándose)
+- Proyección 2100: +0.43 a +0.84 metros (escenario intermedio)
+
+Eventos Extremos (aumento desde 1980):
+- Olas de calor: +300%
+- Sequías severas: +200%
+- Inundaciones: +150%
+- Huracanes categoría 4-5: +60%
+
+Costo Económico:
+- Desastres climáticos 2023: $280 mil millones en daños
+- Costo proyectado inacción: 5-20% del PIB global anual para 2100
+- Inversión necesaria mitigación: 2-3% del PIB global anual
+
+Biodiversidad:
+- 1 millón de especies en riesgo de extinción
+- 30% de especies evaluadas amenazadas por cambio climático
+- Corales: 50% perdidos desde 1950; proyección: 90% para 2050 (+1.5°C)
+
+Migración Climática:
+- Desplazados por desastres climáticos 2023: 32.6 millones de personas
+- Proyección 2050: 200 millones de migrantes climáticos
+
+ENERGÍAS Y TRANSICIÓN:
+
+Renovables (2023):
+- Capacidad instalada global: 3,870 GW
+- 30% de la generación eléctrica mundial
+- Inversión 2023: $500 mil millones
+- Solar: crecimiento 24% anual
+- Eólica: crecimiento 12% anual
+
+Vehículos Eléctricos:
+- Ventas 2023: 14 millones (18% del mercado)
+- Flota global: 40 millones de VE
+- Proyección 2030: 50% de ventas nuevas serán VE
+
+Baterías:
+- Costo: $139/kWh (2023), bajó 89% desde 2010
+- Capacidad fabricación: 1,200 GWh/año
+
+COMPROMISOS Y REALIDAD:
+
+Gap de Emisiones:
+- Emisiones actuales: 57 Gt CO2eq
+- Necesario para 1.5°C: 33 Gt CO2eq para 2030
+- Gap: 24 Gt (42% de reducción necesaria en 7 años)
+
+Financiamiento Climático:
+- Prometido a países en desarrollo: $100 mil millones/año (desde 2020)
+- Realidad 2022: $83.3 mil millones
+- Necesidad real: $2.4 billones/año hasta 2030
+
+NDCs (Contribuciones Determinadas Nacionalmente):
+- Solo 6% de países con NDCs suficientes para 1.5°C
+- NDCs actuales llevan a +2.5-2.9°C
+- Revisión necesaria: todos los países deben triplicar ambición
+
+PERCEPCIONES PÚBLICAS:
+
+Aceptación del Cambio Climático:
+- Global: 86% cree que es real
+- Atribuye a humanos: 72%
+- Preocupados: 68%
+- Dispuestos a cambiar estilo de vida: 48%
+
+Variación Regional:
+- Europa: 91% acepta cambio climático
+- América Latina: 88%
+- Asia: 85%
+- Medio Oriente: 72%
+- Diferencias políticas significativas en algunos países (EE.UU., Australia)
+
+SOLUCIONES Y TECNOLOGÍAS:
+
+Potencial de Reducción (Gt CO2eq para 2030):
+- Energía renovable: 12.5 Gt
+- Eficiencia energética: 8.2 Gt
+- Reforestación: 3.6 Gt
+- Agricultura sostenible: 4.1 Gt
+- Captura de carbono: 2.0 Gt
+
+Costo-Efectividad:
+- Solar y eólica: ya más baratas que combustibles fósiles en 70% del mundo
+- Eficiencia energética: retorno de inversión 3-4 años
+- Reforestación: $0.10-$1 por tonelada CO2
+
+CONCLUSIÓN ESTADÍSTICA:
+Tenemos tecnología y conocimiento para limitar calentamiento a 1.5-2°C, pero la ventana se cierra rápidamente. Requiere acción inmediata y transformación económica sin precedentes. Cada décima de grado importa en impactos humanos y ecológicos.

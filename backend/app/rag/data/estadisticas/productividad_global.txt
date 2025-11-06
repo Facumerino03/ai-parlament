@@ -1,0 +1,59 @@
+Estadísticas: Productividad Laboral Global 2023
+
+Fuente: OECD (Organización para la Cooperación y el Desarrollo Económicos)
+
+PRODUCTIVIDAD POR HORA TRABAJADA (GDP por hora en USD):
+
+Países Líderes:
+1. Luxemburgo: $118.7 por hora
+2. Irlanda: $106.5 por hora
+3. Noruega: $88.3 por hora
+4. Bélgica: $79.2 por hora
+5. Dinamarca: $77.8 por hora
+
+América Latina:
+- Chile: $31.2 por hora
+- Argentina: $29.5 por hora
+- México: $24.8 por hora
+- Brasil: $22.3 por hora
+
+HORAS TRABAJADAS ANUALES:
+
+Países con Menos Horas:
+1. Alemania: 1,349 horas/año
+2. Dinamarca: 1,380 horas/año
+3. Noruega: 1,425 horas/año
+4. Países Bajos: 1,434 horas/año
+
+Países con Más Horas:
+1. México: 2,226 horas/año
+2. Costa Rica: 2,149 horas/año
+3. Corea del Sur: 1,915 horas/año
+4. Grecia: 1,872 horas/año
+
+CORRELACIÓN CLAVE:
+Países con menos horas trabajadas tienden a tener mayor productividad por hora. La correlación inversa es significativa (r = -0.67).
+
+TENDENCIAS HISTÓRI CAS (2010-2023):
+- Productividad global aumentó 18% en promedio
+- Horas trabajadas se redujeron 5% en economías desarrolladas
+- Productividad por hora aumentó 24% en economías desarrolladas
+
+TRABAJO REMOTO E HÍBRIDO (2023):
+- 35% de trabajadores en economías desarrolladas trabajan remoto o híbrido
+- Reportan productividad igual o superior en 78% de los casos
+- Ahorro promedio en transporte: 8.5 horas semanales
+- Satisfacción laboral: +23% comparado con trabajo presencial exclusivo
+
+BURNOUT Y PRODUCTIVIDAD:
+- 42% de trabajadores globales reportan síntomas de burnout (2023)
+- Burnout reduce productividad en 30-40% según estudios
+- Costo global del burnout: $322 mil millones anuales en productividad perdida
+
+AUTOMATIZACIÓN:
+- 25% de tareas laborales son automatizables con tecnología actual
+- Se proyecta que 85 millones de empleos serán desplazados para 2025
+- Simultáneamente, 97 millones de nuevos roles emergerán
+- Requiere inversión en re-entrenamiento de $34 mil millones globales
+
+Conclusión: Mayor productividad no correlaciona con más horas trabajadas. La calidad y organización del trabajo son más importantes que la cantidad de horas.

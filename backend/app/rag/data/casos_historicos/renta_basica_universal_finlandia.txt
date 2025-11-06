@@ -1,0 +1,75 @@
+Caso Histórico: Prueba Piloto de Renta Básica Universal en Finlandia (2017-2018)
+
+CONTEXTO:
+Entre enero de 2017 y diciembre de 2018, Finlandia condujo un experimento controlado de Renta Básica Universal (RBU), el primero a nivel nacional en Europa.
+
+DISEÑO DEL EXPERIMENTO:
+- Participantes: 2,000 personas desempleadas (25-58 años)
+- Grupo control: 173,000 personas desempleadas no participantes
+- Pago mensual: 560€ incondicionales (sin requisitos de búsqueda de empleo)
+- Duración: 24 meses
+- Presupuesto: €20 millones
+
+OBJETIVOS:
+1. Evaluar si RBU incentiva búsqueda de empleo
+2. Reducir burocracia del sistema de bienestar
+3. Analizar impacto en bienestar y salud mental
+4. Medir efectos en emprendimiento
+
+RESULTADOS PRINCIPALES:
+
+Empleo:
+- No hubo diferencia significativa en tasas de empleo entre grupo experimental (43.7%) y control (42.8%)
+- Días trabajados: 78 vs 73 días en promedio (ligeramente superior en grupo experimental)
+- No se evidenció "trampa de pobreza" o desincentivo laboral
+
+Bienestar:
+- Mejora significativa en bienestar mental (+6% en escala de satisfacción)
+- Reducción del estrés financiero (73% reportó menos estrés)
+- Mayor confianza en el futuro (58% vs 46% en grupo control)
+
+Salud:
+- Menos síntomas de depresión (-12%)
+- Menor uso de servicios de salud mental
+- Mejora en autoestima y sensación de autonomía
+
+Aspectos Económicos:
+- No aumentó significativamente el emprendimiento
+- Participantes aceptaron más trabajos temporales o de medio tiempo
+- Mayor disposición a tomar riesgos laborales
+
+CRÍTICAS Y LIMITACIONES:
+
+1. Monto Insuficiente:
+   - 560€ no cubre costo de vida completo
+   - Participantes seguían necesitando trabajar
+
+2. Duración Limitada:
+   - 2 años no es suficiente para evaluar efectos a largo plazo
+   - Participantes sabían que era temporal
+
+3. Grupo Limitado:
+   - Solo desempleados, no toda la población
+   - No evalúa impacto en empleados que podrían dejar trabajos
+
+4. Costo Extrapolado:
+   - Aplicar a toda Finlandia: ~€20 mil millones anuales
+   - Representa 36% del presupuesto gubernamental actual
+   - Requeriría reforma tributaria significativa
+
+LECCIONES APRENDIDAS:
+
+1. RBU no genera desincentivo laboral significativo
+2. Beneficios principales son en salud mental y bienestar
+3. Simplifica burocracia y reduce costos administrativos
+4. Viabilidad económica requiere reestructuración del sistema tributario
+5. Efectos varían según contexto cultural y económico
+
+EXPANSIÓN Y CONTEXTO GLOBAL:
+Tras este piloto, experimentos similares se condujeron en:
+- Kenya (GiveDirectly, 2016-2023): resultados positivos en economía rural
+- Canadá (Ontario, 2017-2019): cancelado prematuramente
+- España (2020): RBU temporal durante COVID-19, se volvió permanente
+
+CONCLUSIÓN:
+El experimento finlandés demostró que RBU no desincentiva el trabajo pero tampoco resuelve mágicamente el desempleo. Su principal valor es en bienestar y reducción de estrés. La viabilidad económica a escala nacional sigue siendo el desafío principal.

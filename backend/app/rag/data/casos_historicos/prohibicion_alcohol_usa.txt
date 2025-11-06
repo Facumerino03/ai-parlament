@@ -1,0 +1,118 @@
+Caso Histórico: La Prohibición del Alcohol en Estados Unidos (1920-1933)
+
+CONTEXTO HISTÓRICO:
+La "Ley Seca" o Prohibición fue la prohibición nacional de producción, importación, transporte y venta de bebidas alcohólicas en Estados Unidos, vigente desde 1920 hasta 1933.
+
+IMPLEMENTACIÓN:
+- 18ª Enmienda Constitucional (ratificada en 1919, efectiva 1920)
+- Ley Volstead: definió alcohol como cualquier bebida con más de 0.5% de contenido alcohólico
+- Aplicación federal: el Departamento del Tesoro supervisaba el cumplimiento
+
+OBJETIVOS DECLARADOS:
+1. Reducir criminalidad y corrupción
+2. Mejorar salud pública y reducir muertes por alcohol
+3. Fortalecer la familia y valores morales
+4. Aumentar productividad laboral
+5. Reducir gastos sociales en atención a alcoholismo
+
+RESULTADOS REALES:
+
+Criminalidad (Efecto Contrario):
+- Surgimiento del crimen organizado a gran escala
+- Al Capone: $60 millones anuales del contrabando de alcohol (equivalente a $1,000 millones actuales)
+- Homicidios aumentaron 78% durante la Prohibición
+- Corrupción policial y judicial generalizada
+- 30,000 speakeasies (bares ilegales) solo en Nueva York
+
+Salud Pública (Mixto):
+- Muertes por cirrosis hepática: reducción inicial del 10-20%
+- Pero: aumento de envenenamiento por alcohol industrial (10,000+ muertes)
+- Consumo de alcohol de calidad desconocida y peligrosa
+- Internaciones por problemas de alcohol: aumentaron 300% en algunas ciudades
+
+Economía (Negativo):
+- Pérdida de $11 mil millones en ingresos fiscales (13 años)
+- 100,000 empleos perdidos en industria legal
+- $300 millones gastados en hacer cumplir la ley (sin éxito)
+- Florecimiento de mercado negro: $3 mil millones anuales
+
+Social (Fragmentado):
+- Respeto por la ley disminuyó significativamente
+- Normalización de la ilegalidad (clases medias consumiendo ilegalmente)
+- Discriminación en aplicación: minorías y pobres perseguidos desproporcionadamente
+- División social profunda entre "secos" y "mojados"
+
+Productividad (No Mejoró):
+- No hay evidencia de mejora significativa en productividad laboral
+- Algunas fábricas reportaron menos ausentismo, pero efecto marginal
+
+FACTORES DE FRACASO:
+
+1. Imposibilidad de Hacer Cumplir:
+   - 2,836 km de frontera con Canadá y México
+   - Costas extensas imposibles de monitorear completamente
+   - Soborno generalizado de oficiales
+
+2. Demanda Continua:
+   - El deseo público de alcohol no desapareció
+   - Mercado negro floreció para satisfacer demanda
+
+3. Falta de Consenso:
+   - Grandes ciudades mayormente en contra
+   - Áreas rurales mayormente a favor
+   - División regional profunda
+
+4. Efectos No Anticipados:
+   - Crimen organizado se fortaleció enormemente
+   - Calidad y seguridad del alcohol disminuyó
+   - Hipocresía social generalizada
+
+DEROGACIÓN (1933):
+
+21ª Enmienda: única enmienda constitucional que deroga otra
+
+Razones de la Derogación:
+1. Fracaso evidente en objetivos
+2. Gran Depresión: se necesitaban ingresos fiscales del alcohol
+3. Cambio en opinión pública: 74% a favor de derogar (1933)
+4. Reconocimiento de efectos contraproducentes
+
+LECCIONES APRENDIDAS:
+
+1. Prohibición vs. Regulación:
+   - Prohibir algo con alta demanda crea mercados negros
+   - Regulación puede ser más efectiva que prohibición total
+
+2. Consecuencias No Intencionales:
+   - Políticas bienintencionadas pueden tener efectos opuestos
+   - Análisis de implementabilidad es crucial
+
+3. Aplicabilidad de la Ley:
+   - Leyes que la mayoría no apoya son difíciles de hacer cumplir
+   - Costo de enforcement puede exceder beneficios
+
+4. Estigma vs. Educación:
+   - Criminalización no necesariamente reduce consumo
+   - Educación y regulación pueden ser más efectivas
+
+5. Mercados Negros:
+   - La prohibición no elimina la oferta, la vuelve ilegal y peligrosa
+   - Organizaciones criminales prosperan en mercados prohibidos
+
+RELEVANCIA CONTEMPORÁNEA:
+
+El caso de la Prohibición se cita frecuentemente en debates sobre:
+- Legalización de drogas (cannabis, etc.)
+- Regulación vs. prohibición en políticas públicas
+- Costo-beneficio de hacer cumplir leyes impopulares
+- Consecuencias no intencionales de políticas
+
+Ejemplo Moderno: Portugal despenalizó todas las drogas en 2001. Resultados tras 20 años:
+- Uso de drogas no aumentó significativamente
+- Muertes por sobredosis cayeron 85%
+- Infecciones por VIH cayeron 95%
+- Costos de aplicación de la ley bajaron
+- Tratamiento aumentó (en lugar de encarcelamiento)
+
+CONCLUSIÓN:
+La Prohibición estadounidense es un caso clásico de política con buenas intenciones que fracasó espectacularmente debido a implementación deficiente, falta de consideración de la naturaleza humana, y efectos secundarios no anticipados. Demuestra que las leyes deben ser aplicables, basadas en realidad (no solo moralidad), y considerar consecuencias no intencionales.

@@ -1,0 +1,108 @@
+Guía de Falacias Lógicas Comunes en Debates
+
+FALACIAS DE RELEVANCIA:
+
+1. AD HOMINEM (Ataque a la Persona)
+Definición: Atacar al argumentador en lugar del argumento.
+Ejemplo: "No podemos confiar en tu propuesta económica porque nunca has dirigido una empresa."
+Por qué es falaz: El mérito de un argumento es independiente de quien lo presenta.
+
+2. FALACIA DEL ESPANTAPÁJAROS (Strawman)
+Definición: Distorsionar el argumento del oponente para hacerlo más fácil de atacar.
+Ejemplo: "Propones energía renovable, así que quieres destruir la economía y que todos vivamos en cuevas."
+Por qué es falaz: No representa fielmente la posición original.
+
+3. FALSO DILEMA (Falsa Dicotomía)
+Definición: Presentar solo dos opciones cuando existen más alternativas.
+Ejemplo: "O apoyas la semana laboral de 4 días o quieres que la gente trabaje hasta morir."
+Por qué es falaz: Ignora soluciones intermedias o alternativas.
+
+4. APELACIÓN A LA AUTORIDAD INAPROPIADA
+Definición: Citar a alguien famoso o con autoridad en un campo no relacionado.
+Ejemplo: "Einstein creía en Dios, por lo tanto la religión es científicamente válida."
+Por qué es falaz: La autoridad en un campo no se transfiere automáticamente a otros.
+
+5. APELACIÓN A LA POPULARIDAD (Ad Populum)
+Definición: Argumentar que algo es verdadero porque muchos lo creen.
+Ejemplo: "Millones de personas piensan que el cambio climático es falso, así que debe serlo."
+Por qué es falaz: La verdad no se determina por consenso popular.
+
+FALACIAS DE CAUSA:
+
+6. POST HOC ERGO PROPTER HOC (Después de esto, por lo tanto, debido a esto)
+Definición: Asumir que porque B ocurrió después de A, entonces A causó B.
+Ejemplo: "Implementamos jornadas flexibles y la productividad bajó, por lo tanto las jornadas flexibles causan baja productividad."
+Por qué es falaz: Correlación no implica causalidad; puede haber otros factores.
+
+7. FALSA CAUSA (Cum Hoc Ergo Propter Hoc)
+Definición: Asumir causalidad entre dos eventos que ocurren juntos.
+Ejemplo: "Los países con más heladerías tienen más crímenes, por lo tanto las heladerías causan crimen."
+Por qué es falaz: Ignora variables confundidoras (en este caso, población y temperatura).
+
+8. PENDIENTE RESBALADIZA (Slippery Slope)
+Definición: Argumentar que una acción llevará inevitablemente a consecuencias extremas sin justificación.
+Ejemplo: "Si permitimos semana laboral de 4 días, pronto querrán 3 días, luego 2, y eventualmente nadie trabajará."
+Por qué es falaz: No demuestra que los pasos intermedios sean inevitables.
+
+FALACIAS DE EVIDENCIA:
+
+9. GENERALIZACIÓN APRESURADA
+Definición: Concluir basándose en una muestra insuficiente o no representativa.
+Ejemplo: "Mi primo probó RBU en un experimento y dejó de trabajar, por lo tanto RBU hace a todos flojos."
+Por qué es falaz: Una anécdota no es evidencia suficiente.
+
+10. CHERRY PICKING (Selección Sesgada)
+Definición: Presentar solo evidencia que apoya tu posición, ignorando evidencia contraria.
+Ejemplo: "Este estudio muestra que renovables son caras [ignora 50 estudios que muestran lo contrario]."
+Por qué es falaz: No presenta el panorama completo de la evidencia.
+
+11. APELACIÓN A LA IGNORANCIA
+Definición: Argumentar que algo es verdadero porque no se ha probado falso, o viceversa.
+Ejemplo: "No hay estudios que demuestren daño, por lo tanto es 100% seguro."
+Por qué es falaz: Ausencia de evidencia no es evidencia de ausencia.
+
+FALACIAS DE ESTRUCTURA:
+
+12. PETICIÓN DE PRINCIPIO (Circular Reasoning)
+Definición: Usar la conclusión como premisa del argumento.
+Ejemplo: "Las jornadas cortas son mejores porque trabajar menos es superior."
+Por qué es falaz: No aporta razones independientes para la conclusión.
+
+13. TU QUOQUE (Tú También)
+Definición: Desviar crítica acusando al oponente de lo mismo.
+Ejemplo: "¿Cómo puedes criticar las emisiones de mi industria cuando tú conduces un auto?"
+Por qué es falaz: La validez del argumento no depende de la consistencia del argumentador.
+
+14. MUÑECO DE TRAPO EMOCIONAL
+Definición: Apelar a emociones en lugar de lógica.
+Ejemplo: "Piensen en los niños que sufrirán si implementamos esto."
+Por qué es falaz: Las emociones no determinan la validez lógica.
+
+FALACIAS ESTADÍSTICAS:
+
+15. TAMAÑO DE MUESTRA INADECUADO
+Definición: Basar conclusiones en muestras muy pequeñas.
+Ejemplo: "Preguntamos a 5 personas y 4 están de acuerdo, eso es 80% de apoyo."
+Por qué es falaz: Muestras pequeñas tienen alta variabilidad y sesgo.
+
+16. SESGO DE SUPERVIVENCIA
+Definición: Enfocarse en casos exitosos ignorando fracasos.
+Ejemplo: "Muchos emprendedores abandonaron la universidad y son millonarios, por lo tanto no necesitas educación."
+Por qué es falaz: Ignora la mayoría que abandonó y fracasó.
+
+CÓMO IDENTIFICAR FALACIAS EN DEBATES:
+
+1. Pregúntate: ¿Las premisas realmente apoyan la conclusión?
+2. Busca saltos lógicos o supuestos no declarados
+3. Verifica si la evidencia es representativa y suficiente
+4. Identifica si se ataca el argumento o la persona
+5. Detecta uso de lenguaje emocional en lugar de razonamiento
+
+RESPONDER A FALACIAS:
+
+1. Identifica la falacia específicamente: "Esto es un argumento ad hominem porque..."
+2. Explica por qué es problemática
+3. Pide reformular el argumento sin la falacia
+4. Si es posible, ofrece la versión correcta del razonamiento
+
+Recuerda: Identificar una falacia no significa que la conclusión sea falsa, solo que el argumento usado no es válido. Un argumento puede ser falaz pero la conclusión aún ser verdadera.

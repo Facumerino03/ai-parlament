@@ -1,0 +1,38 @@
+Estudio: Transición a Energías Renovables y su Impacto Económico-Ambiental
+
+Fuente: International Renewable Energy Agency (IRENA) - Informe 2023
+
+Análisis Global de Transición Energética:
+
+1. Datos Económicos:
+   - Costo de energía solar: reducción del 89% desde 2010 (de $378/MWh a $40/MWh en 2023)
+   - Costo de energía eólica: reducción del 70% en la misma década
+   - Inversión global en renovables 2023: $500 mil millones USD
+   - Costo de almacenamiento en baterías: reducción del 85% desde 2010
+
+2. Empleo:
+   - 12.7 millones de empleos en energías renovables a nivel global (2023)
+   - Cada inversión de $1 millón crea 5-7 empleos directos e indirectos
+   - Transición requiere re-entrenamiento de 6 millones de trabajadores del sector fósil
+
+3. Impacto Ambiental:
+   - Reducción potencial del 45% en emisiones globales de CO2 para 2030
+   - Cada MW de capacidad solar evita 1,500 toneladas de CO2 anuales
+   - Mejora en calidad del aire: reducción del 30-50% en partículas PM2.5 en áreas con alta penetración renovable
+
+4. Desafíos Técnicos:
+   - Intermitencia: necesidad de sistemas de almacenamiento y redes inteligentes
+   - Inversión en infraestructura de red: estimado $14 billones globales hasta 2050
+   - Dependencia de materiales críticos (litio, cobalto, tierras raras)
+
+5. Casos de Éxito:
+   - Costa Rica: 98% de electricidad renovable (2023)
+   - Dinamarca: 80% de energía eólica
+   - Portugal: 95 días consecutivos sin energía fósil (2023)
+
+6. Aspectos Sociales:
+   - Reducción de precios de electricidad en mercados con alta penetración renovable
+   - Mejora en salud pública: prevención de 300,000 muertes prematuras anuales por contaminación
+   - Desigualdad regional: países en desarrollo necesitan $1 billón en transferencia tecnológica
+
+Conclusiones: La transición es técnica y económicamente viable. Los costos iniciales elevados se compensan con beneficios a largo plazo. Requiere planificación coordinada y apoyo para trabajadores en transición.
