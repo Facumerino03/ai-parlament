@@ -5,7 +5,7 @@ import { cn, formatTimestamp, downloadTextFile } from './lib/utils'
 import { Button } from './components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from './components/ui/card'
 import {
-  Users, TrendingUp, Heart, Flask, Leaf, Scale, Wrench, Search,
+  Users, TrendingUp, Heart, FlaskConical, Leaf, Scale, Wrench, Search,
   FileText, Database, Lightbulb, Loader2, Download, CheckCircle2, AlertCircle
 } from 'lucide-react'
 
@@ -14,7 +14,7 @@ const AGENTES_INFO: Record<string, AgenteInfo> = {
   moderador: { nombre: 'Moderador', rol: 'Orquestación', color: 'bg-blue-500', icon: 'Users' },
   economista: { nombre: 'Economista', rol: 'Análisis Económico', color: 'bg-green-500', icon: 'TrendingUp' },
   sociologo: { nombre: 'Sociólogo', rol: 'Impacto Social', color: 'bg-purple-500', icon: 'Heart' },
-  cientifico: { nombre: 'Científico', rol: 'Evidencia Empírica', color: 'bg-cyan-500', icon: 'Flask' },
+  cientifico: { nombre: 'Científico', rol: 'Evidencia Empírica', color: 'bg-cyan-500', icon: 'FlaskConical' },
   ambientalista: { nombre: 'Ambientalista', rol: 'Sostenibilidad', color: 'bg-emerald-600', icon: 'Leaf' },
   etico: { nombre: 'Ético', rol: 'Dilemas Morales', color: 'bg-pink-500', icon: 'Scale' },
   pragmatico: { nombre: 'Pragmático', rol: 'Viabilidad Práctica', color: 'bg-orange-500', icon: 'Wrench' },
@@ -26,7 +26,7 @@ const AGENTES_INFO: Record<string, AgenteInfo> = {
 
 const getIcon = (iconName: string) => {
   const icons: Record<string, any> = {
-    Users, TrendingUp, Heart, Flask, Leaf, Scale, Wrench, Search, FileText, Database, Lightbulb
+    Users, TrendingUp, Heart, FlaskConical, Leaf, Scale, Wrench, Search, FileText, Database, Lightbulb
   }
   return icons[iconName] || Users
 }
@@ -78,23 +78,47 @@ function App() {
 
   const conectarStream = (id: string) => {
     const url = debateApi.getStreamUrl(id)
+    console.log('🔌 Conectando a SSE stream:', url)
     const es = new EventSource(url)
 
-    es.addEventListener('argumento', (event) => {
+    es.addEventListener('connected', (event) => {
       const data = JSON.parse(event.data)
-      setArgumentos(prev => [...prev, data])
-      setAgenteActual(data.agente)
-      setTimeout(() => setAgenteActual(null), 3000)
-      setIsInitiating(false)
+      console.log('✅ Conexión SSE establecida:', data)
+    })
+
+    es.addEventListener('waiting', (event) => {
+      const data = JSON.parse(event.data)
+      console.log('⏳ Esperando:', data.mensaje)
+    })
+
+    es.addEventListener('ping', (event) => {
+      const data = JSON.parse(event.data)
+      console.log('🏓 Ping recibido:', data)
+    })
+
+    es.addEventListener('argumento', (event) => {
+      console.log('📝 Evento argumento recibido:', event.data)
+      try {
+        const data = JSON.parse(event.data)
+        console.log('📝 Argumento parseado:', data)
+        setArgumentos(prev => [...prev, data])
+        setAgenteActual(data.agente)
+        setTimeout(() => setAgenteActual(null), 3000)
+        setIsInitiating(false)
+      } catch (err) {
+        console.error('❌ Error parseando argumento:', err, event.data)
+      }
     })
 
     es.addEventListener('fase_cambio', (event) => {
       const data = JSON.parse(event.data)
+      console.log('🔄 Cambio de fase:', data)
       setFase(data.fase)
       setRonda(data.ronda || 0)
     })
 
     es.addEventListener('completado', async () => {
+      console.log('✅ Debate completado')
       setIsCompleted(true)
       setIsStreaming(false)
       es.close()
@@ -103,17 +127,35 @@ function App() {
       if (id) {
         try {
           const res = await debateApi.obtenerResultado(id)
+          console.log('📊 Resultado obtenido:', res)
           setResultado(res)
         } catch (err) {
-          console.error('Error obteniendo resultado:', err)
+          console.error('❌ Error obteniendo resultado:', err)
         }
       }
     })
 
-    es.onerror = () => {
+    es.addEventListener('error', (event: any) => {
+      console.error('❌ Error event recibido:', event)
+      if (event.data) {
+        try {
+          const data = JSON.parse(event.data)
+          setError(data.mensaje || 'Error en el debate')
+        } catch {
+          setError('Error en el debate')
+        }
+      }
+    })
+
+    es.onerror = (err) => {
+      console.error('❌ EventSource error:', err)
       setError('Error en conexión de streaming')
       setIsStreaming(false)
       es.close()
+    }
+
+    es.onopen = () => {
+      console.log('🌐 EventSource connection opened')
     }
 
     eventSourceRef.current = es
@@ -314,9 +356,28 @@ ${resultado.acta_completa}
             <Card>
               <CardHeader>
                 <CardTitle>Debate en Vivo</CardTitle>
+                <CardDescription>
+                  {argumentos.length === 0 && isStreaming && (
+                    <span className="text-blue-600 animate-pulse">
+                      Esperando argumentos del debate...
+                    </span>
+                  )}
+                  {argumentos.length > 0 && (
+                    <span className="text-slate-600">
+                      {argumentos.length} intervenciones registradas
+                    </span>
+                  )}
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4 max-h-[600px] overflow-y-auto pr-2">
+                  {argumentos.length === 0 && isStreaming && (
+                    <div className="text-center py-12">
+                      <Loader2 className="h-12 w-12 animate-spin mx-auto text-blue-500 mb-4" />
+                      <p className="text-slate-600 font-medium">Preparando el debate...</p>
+                      <p className="text-slate-500 text-sm mt-2">Los agentes están analizando el tema</p>
+                    </div>
+                  )}
                   {argumentos.map((arg, idx) => {
                     const agenteInfo = AGENTES_INFO[arg.agente] || AGENTES_INFO.moderador
                     const Icon = getIcon(agenteInfo.icon)

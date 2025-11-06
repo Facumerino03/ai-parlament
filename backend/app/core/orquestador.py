@@ -227,16 +227,16 @@ class OrquestadorDebate:
             )
             yield arg
 
-            # 2. Select 3-4 agents to respond (rotate and balance participation)
+            # 2. Select 2-3 agents to respond (REDUCED for rate limits)
             agentes_activos = self.estado.config.get("perspectivas", self.agentes_perspectiva)
             agentes_a_responder = self._seleccionar_agentes_para_ronda(
                 agentes_activos,
                 ronda,
-                num_a_seleccionar=min(4, len(agentes_activos))
+                num_a_seleccionar=min(3, len(agentes_activos))
             )
 
-            # 3. Selected agents respond
-            for agente_nombre in agentes_a_responder:
+            # 3. Selected agents respond TO EACH OTHER
+            for idx, agente_nombre in enumerate(agentes_a_responder):
                 agente = self.agentes[agente_nombre]
 
                 logger.info(f"Agent {agente_nombre} responding in round {ronda}")
@@ -248,15 +248,30 @@ class OrquestadorDebate:
                         query=f"{self.estado.tema} {mod_analisis[:200]}",
                         top_k=2
                     )
-                    contexto_rag = self.rag_retriever.formatear_para_agente(docs, max_chars=1000)
+                    contexto_rag = self.rag_retriever.formatear_para_agente(docs, max_chars=800)
+
+                # Get last few arguments to enable inter-agent responses
+                ultimos_args = self.estado.argumentos[-5:]
+                ultimo_agente = ultimos_args[-1]['agente'] if ultimos_args else None
+
+                # Instruct agent to respond to specific other agent
+                if idx > 0 and ultimo_agente:
+                    instruccion = (
+                        f"Responde DIRECTAMENTE al argumento de {ultimo_agente}. "
+                        f"Usa '@{ultimo_agente}:' para dirigirte a ese agente. "
+                        f"Contraargumenta, complementa o cuestiona su punto. Sé breve y específico."
+                    )
+                else:
+                    instruccion = (
+                        f"Responde a los puntos del debate. Si alguien dijo algo relevante para tu área, "
+                        f"respóndele directamente con '@NombreAgente:'. Sé breve."
+                    )
 
                 respuesta = agente.generar_argumento(
                     tema=self.estado.tema,
-                    contexto_debate=self.estado.obtener_contexto_para_agente(agente_nombre, ultimo_n=12),
+                    contexto_debate=self.estado.obtener_contexto_para_agente(agente_nombre, ultimo_n=8),
                     contexto_rag=contexto_rag,
-                    instruccion_especifica=f"Responde a los puntos planteados en el debate. "
-                                           f"Profundiza, contraargumenta o amplía según sea necesario. "
-                                           f"Aporta nuevo valor sin repetir."
+                    instruccion_especifica=instruccion
                 )
 
                 arg = self.estado.agregar_argumento(
@@ -430,8 +445,8 @@ class OrquestadorDebate:
             # Phase 2: Free Debate
             yield from self.ejecutar_debate_libre()
 
-            # Phase 3: Interpelaciones
-            yield from self.ejecutar_interpelaciones()
+            # Phase 3: Interpelaciones - SKIPPED to reduce API calls
+            # yield from self.ejecutar_interpelaciones()
 
             # Phase 4: Synthesis
             yield from self.ejecutar_sintesis()
