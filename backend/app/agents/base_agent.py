@@ -24,7 +24,7 @@ class BaseAgent:
         system_prompt: str,
         modelo: str = None,
         temperature: float = None,
-        max_tokens: int = None,
+        max_tokens: int = None,  # <-- El usuario puede sobreescribir esto
         llm_client: LLMClient = None
     ):
         """
@@ -46,14 +46,24 @@ class BaseAgent:
         self.system_prompt = system_prompt
         self.modelo = modelo or settings.model_gemini
         self.temperature = temperature if temperature is not None else settings.temperature_default
-        self.max_tokens = max_tokens or settings.max_tokens_per_argument
+        
+        # --- CAMBIO CLAVE ---
+        # 'max_tokens' pasado en el constructor (ej. max_tokens=250) tiene prioridad.
+        # Si no se pasa (es None), usamos un default de 180.
+        # 180 es un límite seguro para los prompts de ~110-120 palabras.
+        # El valor anterior (settings.max_tokens_per_argument, ~250) era demasiado alto
+        # y causaba los cortes.
+        sensible_default_tokens = 180 
+        self.max_tokens = max_tokens or sensible_default_tokens
+        # ---------------------
+
         self.llm_client = llm_client or LLMClient()
 
         # Agent's own intervention history
         self.historial: List[Dict[str, Any]] = []
 
         logger.info(
-            f"Initialized agent: {self.nombre} (role: {self.rol}, model: {self.modelo})"
+            f"Initialized agent: {self.nombre} (role: {self.rol}, model: {self.modelo}, max_tokens: {self.max_tokens})"
         )
 
     def generar_argumento(
@@ -111,6 +121,18 @@ class BaseAgent:
                     "Aporta valor al debate sin repetir lo que otros ya dijeron."
                 )
 
+            # --- CAMBIO CLAVE ---
+            # Se elimina el "CRÍTICO: 4 oraciones SÍ O SÍ"
+            # Se reemplaza por un recordatorio que apunta al system_prompt
+            
+            user_message_parts.append(
+                "\n\nRECORDATORIO IMPORTANTE:\n"
+                "1. Revisa tu 'system_prompt'. Tus reglas de estilo y límite de palabras están ahí.\n"
+                "2. CUMPLE ESE LÍMITE (ej. 'MÁX 110 palabras').\n"
+                "3. ASEGÚRATE de terminar tu respuesta con una oración completa y un punto final. No dejes ideas a medias."
+            )
+            # ---------------------
+
             user_message = "\n".join(user_message_parts)
 
             # Prepare messages for LLM
@@ -129,7 +151,7 @@ class BaseAgent:
                 model=self.modelo,
                 messages=messages,
                 temperature=self.temperature,
-                max_tokens=self.max_tokens
+                max_tokens=self.max_tokens  # <-- Ahora usa el límite de 180 (o el que se pasó)
             )
 
             # Store in history
@@ -137,6 +159,14 @@ class BaseAgent:
 
             logger.info(f"Agent {self.nombre} generated argument ({len(response)} chars)")
 
+            # Limpieza simple para remover frases cortadas (aunque ahora debería ser raro)
+            if not response.endswith(('.', '?', '!', '"', ']', '}')):
+                # Si no termina en puntuación, busca la última oración completa
+                last_punctuation = max(response.rfind('.'), response.rfind('?'), response.rfind('!'))
+                if last_punctuation != -1:
+                    response = response[:last_punctuation + 1]
+                    logger.warning(f"Agent {self.nombre} response trimmed due to incomplete sentence.")
+            
             return response
 
         except Exception as e:
@@ -191,7 +221,8 @@ class BaseAgent:
             "metadata": {
                 "modelo": self.modelo,
                 "temperature": self.temperature,
-                "longitud": len(texto)
+                "longitud": len(texto),
+                "max_tokens_limit": self.max_tokens
             }
         }
 
@@ -240,7 +271,7 @@ class BaseAgent:
             "nombre": self.nombre,
             "rol": self.rol,
             "intervenciones": total_intervenciones,
-            "promedio_longitud": longitud_total // total_intervenciones,
+            "promedio_longitud": longitud_total // total_intervenciones if total_intervenciones > 0 else 0,
             "uso_rag": uso_rag_count,
             "modelo": self.modelo
         }

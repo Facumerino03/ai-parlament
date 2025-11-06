@@ -164,25 +164,39 @@ function App() {
   const descargarActa = () => {
     if (!resultado) return
     const content = `PARLAMENTO VIRTUAL DE DEBATES
-================================
+================================================================================
 
 TEMA: ${resultado.tema}
 FECHA: ${resultado.timestamp_inicio}
+DURACIÓN: ${resultado.duracion_segundos ? Math.round(resultado.duracion_segundos) + ' segundos' : 'N/A'}
 
-RESUMEN EJECUTIVO:
+================================================================================
+RESUMEN EJECUTIVO
+================================================================================
+
 ${resultado.resumen_ejecutivo}
 
-CONSENSOS ALCANZADOS:
-${resultado.consensos.map((c: string, i: number) => `${i + 1}. ${c}`).join('\n')}
+================================================================================
+CONSENSOS ALCANZADOS (${resultado.consensos.length})
+================================================================================
 
-DISENSOS REMANENTES:
-${resultado.disensos.map((d: string, i: number) => `${i + 1}. ${d}`).join('\n')}
+${resultado.consensos.length > 0 ? resultado.consensos.map((c: string, i: number) => `${i + 1}. ${c}`).join('\n') : 'No se identificaron consensos específicos.'}
 
-PROPUESTAS HÍBRIDAS:
-${resultado.propuestas_hibridas.map((p: string, i: number) => `${i + 1}. ${p}`).join('\n')}
+================================================================================
+DISENSOS REMANENTES (${resultado.disensos.length})
+================================================================================
 
-TRANSCRIPCIÓN COMPLETA:
-================================
+${resultado.disensos.length > 0 ? resultado.disensos.map((d: string, i: number) => `${i + 1}. ${d}`).join('\n') : 'No se identificaron disensos específicos.'}
+
+================================================================================
+PROPUESTAS HÍBRIDAS (${resultado.propuestas_hibridas.length})
+================================================================================
+
+${resultado.propuestas_hibridas.length > 0 ? resultado.propuestas_hibridas.map((p: string, i: number) => `${i + 1}. ${p}`).join('\n') : 'No se propusieron soluciones híbridas.'}
+
+================================================================================
+TRANSCRIPCIÓN COMPLETA DEL DEBATE
+================================================================================
 
 ${resultado.acta_completa}
 `

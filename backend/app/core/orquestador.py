@@ -410,20 +410,24 @@ class OrquestadorDebate:
         # (Simple parsing - in production could use structured output)
         self._extraer_conclusiones_de_sintesis(sintesis)
 
-        # Secretary generates final minutes
+        # Secretary generates statistics and metadata summary (NOT duplicate consensus)
         secretario = self.agentes[AgentRole.SECRETARIO]
 
-        acta = secretario.generar_argumento(
+        acta_estadisticas = secretario.generar_argumento(
             tema=self.estado.tema,
-            contexto_debate=self.estado.argumentos[-10:],  # Recent context
-            instruccion_especifica="Genera un resumen estructurado final del debate, "
-                                   "listando las principales conclusiones y áreas de consenso/disenso."
+            contexto_debate=self.estado.argumentos[-5:],  # Recent context
+            instruccion_especifica="Genera ESTADÍSTICAS del debate (NO repitas consensos del Sintetizador):\n"
+                                   "- Total de intervenciones por agente\n"
+                                   "- Principales temas mencionados\n"
+                                   "- Nivel de acuerdo/desacuerdo general\n"
+                                   "- Momentos clave del debate\n"
+                                   "Formato: Lista concisa, no repitas conclusiones."
         )
 
         arg = self.estado.agregar_argumento(
             agente=AgentRole.SECRETARIO,
             rol=secretario.rol,
-            contenido=acta
+            contenido=acta_estadisticas
         )
         yield arg
 
@@ -536,24 +540,39 @@ class OrquestadorDebate:
         seccion_actual = None
         for linea in lineas:
             linea_lower = linea.lower().strip()
+            linea_stripped = linea.strip()
 
-            if 'consenso' in linea_lower and (':' in linea or 'alcanzado' in linea_lower):
+            # Detect section headers (markdown bold or plain text with colon)
+            if 'consenso' in linea_lower and ':' in linea_lower:
                 seccion_actual = 'consenso'
-            elif 'disenso' in linea_lower and (':' in linea or 'remanente' in linea_lower):
+                continue
+            elif 'disenso' in linea_lower and ':' in linea_lower:
                 seccion_actual = 'disenso'
-            elif 'propuesta' in linea_lower and (':' in linea or 'híbrida' in linea_lower):
+                continue
+            elif 'propuesta' in linea_lower and (':' in linea_lower or 'híbrida' in linea_lower):
                 seccion_actual = 'propuesta'
-            elif linea.strip() and seccion_actual:
-                # Extract content lines
-                if linea.strip().startswith(('-', '•', '*', '1', '2', '3', '4', '5')):
-                    contenido = linea.strip().lstrip('-•*123456789. ')
+                continue
+            elif 'resumen' in linea_lower and ':' in linea_lower:
+                # Stop parsing when we reach the summary section
+                seccion_actual = None
+                continue
+
+            # Extract content lines (only if we're in a section)
+            if linea_stripped and seccion_actual:
+                # Remove markdown bold markers and list markers
+                contenido = linea_stripped.lstrip('*-•123456789. ')
+
+                # For proposals, accept any non-empty line (not just list items)
+                if seccion_actual == 'propuesta':
+                    if len(contenido) > 15:  # Minimum length for valid proposal
+                        self.estado.agregar_propuesta(contenido)
+                # For consensus/dissent, expect list items
+                elif linea_stripped.startswith(('-', '•', '*')):
                     if len(contenido) > 20:  # Avoid header lines
                         if seccion_actual == 'consenso':
                             self.estado.agregar_consenso(contenido)
                         elif seccion_actual == 'disenso':
                             self.estado.agregar_disenso(contenido)
-                        elif seccion_actual == 'propuesta':
-                            self.estado.agregar_propuesta(contenido)
 
         logger.info(
             f"Extracted: {len(self.estado.consensos)} consensos, "
@@ -564,24 +583,18 @@ class OrquestadorDebate:
     def _generar_resumen_ejecutivo(self) -> str:
         """Generate executive summary from the debate."""
         if not self.estado.consensos and not self.estado.disensos:
-            return "Debate completado. Ver acta completa para detalles."
+            return f"Debate sobre: {self.estado.tema}\n\nDebate completado. Ver secciones de consensos y propuestas más abajo."
 
         resumen = []
-        resumen.append(f"Tema: {self.estado.tema}\n")
+        resumen.append(f"Tema debatido: {self.estado.tema}")
 
-        if self.estado.consensos:
-            resumen.append(f"Principales consensos ({len(self.estado.consensos)}):")
-            for c in self.estado.consensos[:3]:
-                resumen.append(f"  • {c}")
-
-        if self.estado.disensos:
-            resumen.append(f"\nPrincipales disensos ({len(self.estado.disensos)}):")
-            for d in self.estado.disensos[:3]:
-                resumen.append(f"  • {d}")
+        # Brief summary only
+        total_items = len(self.estado.consensos) + len(self.estado.disensos)
+        resumen.append(f"\nSe identificaron {len(self.estado.consensos)} consensos y {len(self.estado.disensos)} disensos principales.")
 
         if self.estado.propuestas_hibridas:
-            resumen.append(f"\nPropuestas integradoras ({len(self.estado.propuestas_hibridas)}):")
-            for p in self.estado.propuestas_hibridas[:2]:
-                resumen.append(f"  • {p}")
+            resumen.append(f"Se propusieron {len(self.estado.propuestas_hibridas)} soluciones integradoras.")
+
+        resumen.append("\nVer detalles completos en las secciones siguientes.")
 
         return "\n".join(resumen)
