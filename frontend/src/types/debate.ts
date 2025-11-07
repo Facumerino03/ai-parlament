@@ -1,4 +1,3 @@
-// Request types
 export interface IniciarDebateRequest {
   tema: string
   config?: {
@@ -8,7 +7,6 @@ export interface IniciarDebateRequest {
   }
 }
 
-// Response types
 export interface IniciarDebateResponse {
   debate_id: string
   status: string
@@ -61,7 +59,6 @@ export interface HealthResponse {
   version?: string
 }
 
-// SSE Event types
 export interface SSEArgumentoEvent {
   agente: string
   rol: string
@@ -83,7 +80,6 @@ export interface SSECompletadoEvent {
   total_argumentos?: number
 }
 
-// Agente information
 export interface AgenteInfo {
   nombre: string
   rol: string
@@ -91,7 +87,6 @@ export interface AgenteInfo {
   icon: string
 }
 
-// Debate phases
 export enum DebateFase {
   INICIALIZACION = 'inicializacion',
   RONDA_INICIAL = 'ronda_inicial',
@@ -101,7 +96,6 @@ export enum DebateFase {
   COMPLETADO = 'completado'
 }
 
-// Agent roles
 export enum AgentRole {
   MODERADOR = 'moderador',
   ECONOMISTA = 'economista',

@@ -253,73 +253,6 @@ Edita `src/index.css`:
 }
 ```
 
-### Añadir Animaciones Personalizadas
-
-En `tailwind.config.js`:
-```javascript
-extend: {
-  keyframes: {
-    'tu-animacion': {
-      '0%': { ... },
-      '100%': { ... },
-    }
-  },
-  animation: {
-    'tu-animacion': 'tu-animacion 1s ease-in-out',
-  }
-}
-```
-
-## 🚀 Despliegue
-
-### Vercel / Netlify
-
-1. Build del proyecto:
-   ```bash
-   npm run build
-   ```
-
-2. Sube la carpeta `dist/` a tu servicio de hosting
-
-3. Configura variables de entorno:
-   - `VITE_API_URL`: URL de tu backend en producción
-
-### Docker
-
-```dockerfile
-FROM node:18-alpine as build
-WORKDIR /app
-COPY package*.json ./
-RUN npm install
-COPY . .
-RUN npm run build
-
-FROM nginx:alpine
-COPY --from=build /app/dist /usr/share/nginx/html
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
-```
-
-## 🤝 Contribuir
-
-1. Fork el repositorio
-2. Crea una rama (`git checkout -b feature/amazing-feature`)
-3. Commit tus cambios (`git commit -m 'Add amazing feature'`)
-4. Push a la rama (`git push origin feature/amazing-feature`)
-5. Abre un Pull Request
-
-## 📄 Licencia
-
-[Especificar licencia]
-
-## 📧 Soporte
-
-Si encuentras problemas:
-1. Revisa la sección de Troubleshooting
-2. Verifica que el backend esté corriendo correctamente
-3. Consulta los logs del navegador (F12 → Console)
-4. Abre un issue en GitHub con detalles del error
-
 ## 🎉 Demo
 
 Para probar rápidamente:
@@ -343,7 +276,3 @@ npm run dev
 - "¿Deberíamos invertir en energía nuclear o renovables?"
 
 ---
-
-**Versión**: 1.0.0
-**Última actualización**: 2024-11-06
-**Desarrollado con** ❤️ **y React**

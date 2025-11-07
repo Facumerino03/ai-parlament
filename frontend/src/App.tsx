@@ -9,7 +9,6 @@ import {
   FileText, Database, Lightbulb, Loader2, Download, CheckCircle2, AlertCircle
 } from 'lucide-react'
 
-// Agentes configuration
 const AGENTES_INFO: Record<string, AgenteInfo> = {
   moderador: { nombre: 'Moderador', rol: 'Orquestación', color: 'bg-blue-500', icon: 'Users' },
   economista: { nombre: 'Economista', rol: 'Análisis Económico', color: 'bg-green-500', icon: 'TrendingUp' },
@@ -48,7 +47,6 @@ function App() {
   const eventSourceRef = useRef<EventSource | null>(null)
   const argumentosEndRef = useRef<HTMLDivElement>(null)
 
-  // Auto-scroll to latest argument
   useEffect(() => {
     argumentosEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [argumentos])
@@ -60,14 +58,11 @@ function App() {
     setIsInitiating(true)
 
     try {
-      // Iniciar debate
       const response = await debateApi.iniciarDebate({ tema })
       setDebateId(response.debate_id)
 
-      // Ejecutar debate
       await debateApi.ejecutarDebate(response.debate_id)
 
-      // Conectar SSE
       conectarStream(response.debate_id)
       setIsStreaming(true)
     } catch (err: any) {
@@ -78,65 +73,54 @@ function App() {
 
   const conectarStream = (id: string) => {
     const url = debateApi.getStreamUrl(id)
-    console.log('🔌 Conectando a SSE stream:', url)
     const es = new EventSource(url)
 
     es.addEventListener('connected', (event) => {
       const data = JSON.parse(event.data)
-      console.log('✅ Conexión SSE establecida:', data)
     })
 
     es.addEventListener('waiting', (event) => {
       const data = JSON.parse(event.data)
-      console.log('⏳ Esperando:', data.mensaje)
     })
 
     es.addEventListener('ping', (event) => {
       const data = JSON.parse(event.data)
-      console.log('🏓 Ping recibido:', data)
     })
 
     es.addEventListener('argumento', (event) => {
-      console.log('📝 Evento argumento recibido:', event.data)
       try {
         const data = JSON.parse(event.data)
-        console.log('📝 Argumento parseado:', data)
         setArgumentos(prev => [...prev, data])
         setAgenteActual(data.agente)
         setTimeout(() => setAgenteActual(null), 3000)
         setIsInitiating(false)
       } catch (err) {
-        console.error('❌ Error parseando argumento:', err, event.data)
+        console.error('Error parsing argument:', err)
       }
     })
 
     es.addEventListener('fase_cambio', (event) => {
       const data = JSON.parse(event.data)
-      console.log('🔄 Cambio de fase:', data)
       setFase(data.fase)
       setRonda(data.ronda || 0)
     })
 
     es.addEventListener('completado', async () => {
-      console.log('✅ Debate completado')
       setIsCompleted(true)
       setIsStreaming(false)
       es.close()
 
-      // Obtener resultado final
       if (id) {
         try {
           const res = await debateApi.obtenerResultado(id)
-          console.log('📊 Resultado obtenido:', res)
           setResultado(res)
         } catch (err) {
-          console.error('❌ Error obteniendo resultado:', err)
+          console.error('Error getting results:', err)
         }
       }
     })
 
     es.addEventListener('error', (event: any) => {
-      console.error('❌ Error event recibido:', event)
       if (event.data) {
         try {
           const data = JSON.parse(event.data)
@@ -148,14 +132,13 @@ function App() {
     })
 
     es.onerror = (err) => {
-      console.error('❌ EventSource error:', err)
+      console.error('EventSource error:', err)
       setError('Error en conexión de streaming')
       setIsStreaming(false)
       es.close()
     }
 
     es.onopen = () => {
-      console.log('🌐 EventSource connection opened')
     }
 
     eventSourceRef.current = es
@@ -222,7 +205,6 @@ ${resultado.acta_completa}
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
       <div className="container mx-auto px-4 py-8 max-w-7xl">
-        {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-slate-900 mb-2">
             🏛️ Parlamento Virtual de Debates
@@ -232,7 +214,6 @@ ${resultado.acta_completa}
           </p>
         </div>
 
-        {/* Status indicator */}
         {isStreaming && (
           <div className="fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded-full shadow-lg flex items-center gap-2 animate-pulse">
             <div className="w-2 h-2 bg-white rounded-full animate-dot-pulse"></div>
@@ -240,7 +221,6 @@ ${resultado.acta_completa}
           </div>
         )}
 
-        {/* Error message */}
         {error && (
           <Card className="mb-6 border-red-300 bg-red-50">
             <CardContent className="pt-6">
@@ -252,7 +232,6 @@ ${resultado.acta_completa}
           </Card>
         )}
 
-        {/* Form or debate view */}
         {!debateId ? (
           <Card className="max-w-2xl mx-auto">
             <CardHeader>
@@ -294,7 +273,6 @@ ${resultado.acta_completa}
           </Card>
         ) : (
           <div className="space-y-6">
-            {/* Progress */}
             {fase && (
               <Card>
                 <CardContent className="pt-6">
@@ -314,7 +292,6 @@ ${resultado.acta_completa}
               </Card>
             )}
 
-            {/* Agentes Grid */}
             <Card>
               <CardHeader>
                 <CardTitle className="text-lg">Agentes Participantes</CardTitle>
@@ -366,7 +343,6 @@ ${resultado.acta_completa}
               </CardContent>
             </Card>
 
-            {/* Stream de Argumentos */}
             <Card>
               <CardHeader>
                 <CardTitle>Debate en Vivo</CardTitle>
@@ -438,7 +414,6 @@ ${resultado.acta_completa}
               </CardContent>
             </Card>
 
-            {/* Resultado Final */}
             {isCompleted && resultado && (
               <Card className="border-green-300 bg-green-50">
                 <CardHeader>

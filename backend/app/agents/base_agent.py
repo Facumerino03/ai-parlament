@@ -112,10 +112,6 @@ class BaseAgent:
                     "Aporta valor al debate sin repetir lo que otros ya dijeron."
                 )
 
-            # --- CAMBIO CLAVE ---
-            # Se elimina el "CRÍTICO: 4 oraciones SÍ O SÍ"
-            # Se reemplaza por un recordatorio que apunta al system_prompt
-            
             user_message_parts.append(
                 "\n\nRECORDATORIO IMPORTANTE:\n"
                 "1. Revisa tu 'system_prompt'. Tus reglas de estilo y límite de palabras están ahí.\n"
@@ -149,7 +145,6 @@ class BaseAgent:
 
             logger.info(f"Agent {self.nombre} generated argument ({len(response)} chars)")
 
-            # Limpieza simple para remover frases cortadas
             if not response.endswith(('.', '?', '!', '"', ']', '}')):
                 last_punctuation = max(response.rfind('.'), response.rfind('?'), response.rfind('!'))
                 if last_punctuation != -1:
@@ -177,11 +172,9 @@ class BaseAgent:
         """
         # Basic implementation: intervene if not too many recent interventions
         if len(self.historial) >= 3:
-            # Check if last intervention was very recent
             ultima_intervencion = self.historial[-1]
             tiempo_ultima = ultima_intervencion.get('timestamp')
             if tiempo_ultima:
-                # Could add time-based logic here
                 pass
 
         return True

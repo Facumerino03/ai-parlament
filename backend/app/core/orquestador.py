@@ -120,10 +120,8 @@ class OrquestadorDebate:
 
         logger.info("Starting initial round")
 
-        # 1. Moderator introduces the topic and may reformulate it
         moderador = self.agentes[AgentRole.MODERADOR]
 
-        # Get initial RAG context
         contexto_rag_inicial = self.rag_retriever.obtener_contexto_inicial(
             self.estado.tema
         )
@@ -142,10 +140,9 @@ class OrquestadorDebate:
             contenido=intro
         )
 
-        self.estado.tema_reformulado = self.estado.tema  # Could extract from intro
+        self.estado.tema_reformulado = self.estado.tema
         yield arg
 
-        # 2. Each perspective agent presents their initial position
         agentes_activos = self.estado.config.get("perspectivas", self.agentes_perspectiva)
 
         for agente_nombre in agentes_activos:
@@ -153,7 +150,6 @@ class OrquestadorDebate:
 
             logger.info(f"Generating initial argument for: {agente_nombre}")
 
-            # Get relevant RAG context for this agent's perspective
             contexto_rag = self.rag_retriever.recuperar_contexto(
                 query=f"{self.estado.tema} {agente.perspectiva}",
                 top_k=3
@@ -211,7 +207,6 @@ class OrquestadorDebate:
             self.estado.ronda_actual = ronda
             logger.info(f"Free debate round {ronda}/{num_rondas}")
 
-            # 1. Moderator identifies points of tension or consensus
             mod_analisis = moderador.generar_argumento(
                 tema=self.estado.tema,
                 contexto_debate=self.estado.obtener_contexto_para_agente(AgentRole.MODERADOR, ultimo_n=15),
@@ -227,7 +222,6 @@ class OrquestadorDebate:
             )
             yield arg
 
-            # 2. Select 2-3 agents to respond (REDUCED for rate limits)
             agentes_activos = self.estado.config.get("perspectivas", self.agentes_perspectiva)
             agentes_a_responder = self._seleccionar_agentes_para_ronda(
                 agentes_activos,
@@ -235,13 +229,11 @@ class OrquestadorDebate:
                 num_a_seleccionar=min(3, len(agentes_activos))
             )
 
-            # 3. Selected agents respond TO EACH OTHER
             for idx, agente_nombre in enumerate(agentes_a_responder):
                 agente = self.agentes[agente_nombre]
 
                 logger.info(f"Agent {agente_nombre} responding in round {ronda}")
 
-                # Optionally get RAG context if agent might need it
                 contexto_rag = None
                 if agente_nombre in [AgentRole.ECONOMISTA, AgentRole.CIENTIFICO]:
                     docs = self.rag_retriever.recuperar_contexto(
@@ -250,11 +242,9 @@ class OrquestadorDebate:
                     )
                     contexto_rag = self.rag_retriever.formatear_para_agente(docs, max_chars=800)
 
-                # Get last few arguments to enable inter-agent responses
                 ultimos_args = self.estado.argumentos[-5:]
                 ultimo_agente = ultimos_args[-1]['agente'] if ultimos_args else None
 
-                # Instruct agent to respond to specific other agent
                 if idx > 0 and ultimo_agente:
                     instruccion = (
                         f"Responde DIRECTAMENTE al argumento de {ultimo_agente}. "
@@ -281,11 +271,9 @@ class OrquestadorDebate:
                 )
                 yield arg
 
-            # 4. Critic may intervene if fallacies detected (every other round)
             if ronda % 2 == 0:
                 logger.info(f"Critic analyzing round {ronda}")
 
-                # Get fallacy information from RAG
                 contexto_falacias = self.rag_retriever.buscar_falacias(
                     "argumentos debate falacias lógicas"
                 )
@@ -324,7 +312,6 @@ class OrquestadorDebate:
 
         moderador = self.agentes[AgentRole.MODERADOR]
 
-        # Moderator generates key questions based on entire debate
         preguntas_prompt = moderador.generar_argumento(
             tema=self.estado.tema,
             contexto_debate=self.estado.obtener_contexto_para_agente(AgentRole.MODERADOR, ultimo_n=20),
@@ -340,11 +327,9 @@ class OrquestadorDebate:
         )
         yield arg
 
-        # Parse questions and direct to agents
-        # For simplicity, ask each active perspective agent one question
         agentes_activos = self.estado.config.get("perspectivas", self.agentes_perspectiva)
 
-        for agente_nombre in agentes_activos[:5]:  # Limit to 5 interpelaciones
+        for agente_nombre in agentes_activos[:5]:
             agente = self.agentes[agente_nombre]
 
             logger.info(f"Interpelación to: {agente_nombre}")
@@ -383,13 +368,11 @@ class OrquestadorDebate:
 
         sintetizador = self.agentes[AgentRole.SINTETIZADOR]
 
-        # Synthesizer analyzes ENTIRE debate
-        # Prepare comprehensive context (all arguments)
         contexto_completo_resumido = self._preparar_contexto_completo_para_sintesis()
 
         sintesis = sintetizador.generar_argumento(
             tema=self.estado.tema,
-            contexto_debate=self.estado.argumentos,  # All arguments
+            contexto_debate=self.estado.argumentos,
             instruccion_especifica="Analiza TODO el debate completo. "
                                    "Genera:\n"
                                    "1. CONSENSOS ALCANZADOS (lista explícita)\n"
@@ -406,16 +389,13 @@ class OrquestadorDebate:
         )
         yield arg
 
-        # Extract consensus, dissents, and proposals from synthesis
-        # (Simple parsing - in production could use structured output)
         self._extraer_conclusiones_de_sintesis(sintesis)
 
-        # Secretary generates statistics and metadata summary (NOT duplicate consensus)
         secretario = self.agentes[AgentRole.SECRETARIO]
 
         acta_estadisticas = secretario.generar_argumento(
             tema=self.estado.tema,
-            contexto_debate=self.estado.argumentos[-5:],  # Recent context
+            contexto_debate=self.estado.argumentos[-5:],
             instruccion_especifica="Genera ESTADÍSTICAS del debate (NO repitas consensos del Sintetizador):\n"
                                    "- Total de intervenciones por agente\n"
                                    "- Principales temas mencionados\n"
@@ -443,19 +423,12 @@ class OrquestadorDebate:
         logger.info("Starting complete debate execution")
 
         try:
-            # Phase 1: Initial Round
             yield from self.ejecutar_ronda_inicial()
 
-            # Phase 2: Free Debate
             yield from self.ejecutar_debate_libre()
 
-            # Phase 3: Interpelaciones - SKIPPED to reduce API calls
-            # yield from self.ejecutar_interpelaciones()
-
-            # Phase 4: Synthesis
             yield from self.ejecutar_sintesis()
 
-            # Mark as completed
             self.estado.completar_debate()
 
             logger.info(
@@ -508,7 +481,6 @@ class OrquestadorDebate:
         num_a_seleccionar: int
     ) -> List[str]:
         """Select agents to participate in a round (rotation + some randomness)."""
-        # Rotate through agents ensuring all participate
         n = len(agentes_disponibles)
         inicio = ((ronda - 1) * num_a_seleccionar) % n
 
@@ -521,20 +493,15 @@ class OrquestadorDebate:
 
     def _preparar_contexto_completo_para_sintesis(self) -> str:
         """Prepare condensed context of entire debate for synthesizer."""
-        # In a real implementation, might need to chunk and summarize
-        # For now, include all arguments (will be truncated by LLM if too long)
         resumen_parts = [f"DEBATE COMPLETO - {len(self.estado.argumentos)} intervenciones\n"]
 
         for arg in self.estado.argumentos:
             resumen_parts.append(f"\n[{arg['agente']}]: {arg['contenido'][:500]}...")
 
-        return "\n".join(resumen_parts[:100])  # Limit to avoid token overflow
+        return "\n".join(resumen_parts[:100])
 
     def _extraer_conclusiones_de_sintesis(self, sintesis_texto: str):
         """Extract consensus, dissents, and proposals from synthesis text (simple parsing)."""
-        # Simple keyword-based extraction
-        # In production, could use structured output or better NLP
-
         lineas = sintesis_texto.split('\n')
 
         seccion_actual = None
@@ -542,7 +509,6 @@ class OrquestadorDebate:
             linea_lower = linea.lower().strip()
             linea_stripped = linea.strip()
 
-            # Detect section headers (markdown bold or plain text with colon)
             if 'consenso' in linea_lower and ':' in linea_lower:
                 seccion_actual = 'consenso'
                 continue
@@ -553,22 +519,17 @@ class OrquestadorDebate:
                 seccion_actual = 'propuesta'
                 continue
             elif 'resumen' in linea_lower and ':' in linea_lower:
-                # Stop parsing when we reach the summary section
                 seccion_actual = None
                 continue
 
-            # Extract content lines (only if we're in a section)
             if linea_stripped and seccion_actual:
-                # Remove markdown bold markers and list markers
                 contenido = linea_stripped.lstrip('*-•123456789. ')
 
-                # For proposals, accept any non-empty line (not just list items)
                 if seccion_actual == 'propuesta':
-                    if len(contenido) > 15:  # Minimum length for valid proposal
+                    if len(contenido) > 15:
                         self.estado.agregar_propuesta(contenido)
-                # For consensus/dissent, expect list items
                 elif linea_stripped.startswith(('-', '•', '*')):
-                    if len(contenido) > 20:  # Avoid header lines
+                    if len(contenido) > 20:
                         if seccion_actual == 'consenso':
                             self.estado.agregar_consenso(contenido)
                         elif seccion_actual == 'disenso':
@@ -588,7 +549,6 @@ class OrquestadorDebate:
         resumen = []
         resumen.append(f"Tema debatido: {self.estado.tema}")
 
-        # Brief summary only
         total_items = len(self.estado.consensos) + len(self.estado.disensos)
         resumen.append(f"\nSe identificaron {len(self.estado.consensos)} consensos y {len(self.estado.disensos)} disensos principales.")
 

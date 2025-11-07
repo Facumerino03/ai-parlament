@@ -116,7 +116,7 @@ async def ejecutar_debate(debate_id: str, background_tasks: BackgroundTasks):
 
 
 async def ejecutar_debate_background(debate_id: str):
-    """Execute debate in background (stores all arguments)."""
+    """Execute debate in background."""
     try:
         debate_info = debates_activos[debate_id]
         orquestador = debate_info["orquestador"]
@@ -170,7 +170,6 @@ async def stream_debate(debate_id: str):
                 })
             }
 
-            # Wait for execution to start
             wait_count = 0
             while not debate_info.get("en_ejecucion") and debate_info.get("status") != "completado":
                 await asyncio.sleep(0.5)
@@ -184,13 +183,10 @@ async def stream_debate(debate_id: str):
 
             logger.info(f"Debate execution started, beginning stream (debate: {debate_id})")
 
-            # Stream arguments as they are generated
             while True:
-                # Check if debate is complete
                 if estado.fase_actual == DebateFase.COMPLETADO:
                     logger.info(f"Debate completed, sending final arguments (debate: {debate_id})")
 
-                    # Send remaining arguments
                     for i in range(last_sent_index, len(estado.argumentos)):
                         arg = estado.argumentos[i]
                         logger.debug(f"Sending final argument {i+1}/{len(estado.argumentos)} from {arg.get('agente')}")
@@ -199,7 +195,6 @@ async def stream_debate(debate_id: str):
                             "data": json.dumps(arg)
                         }
 
-                    # Send completion event
                     yield {
                         "event": "completado",
                         "data": json.dumps({
@@ -211,7 +206,6 @@ async def stream_debate(debate_id: str):
                     logger.info(f"Stream completed successfully (debate: {debate_id})")
                     break
 
-                # Send new arguments
                 current_count = len(estado.argumentos)
                 if current_count > last_sent_index:
                     logger.info(f"Sending {current_count - last_sent_index} new arguments (debate: {debate_id})")
@@ -224,7 +218,6 @@ async def stream_debate(debate_id: str):
                         }
                     last_sent_index = current_count
 
-                # Check for errors
                 if debate_info.get("status") == "error":
                     logger.error(f"Debate error detected in stream (debate: {debate_id})")
                     yield {
@@ -236,9 +229,8 @@ async def stream_debate(debate_id: str):
                     }
                     break
 
-                # Send ping to keep connection alive
                 ping_counter += 1
-                if ping_counter % 10 == 0:  # Every 10 seconds
+                if ping_counter % 10 == 0:
                     yield {
                         "event": "ping",
                         "data": json.dumps({
@@ -247,7 +239,6 @@ async def stream_debate(debate_id: str):
                         })
                     }
 
-                # Wait before checking again
                 await asyncio.sleep(1)
 
         except asyncio.CancelledError:
@@ -312,7 +303,6 @@ async def obtener_resultado_debate(debate_id: str):
     orquestador = debate_info["orquestador"]
     estado = orquestador.estado
 
-    # Check if completed
     if estado.fase_actual != DebateFase.COMPLETADO:
         raise HTTPException(
             status_code=425,  # Too Early
@@ -339,7 +329,6 @@ async def health_check():
     try:
         rag_initialized = rag_retriever is not None
         if rag_initialized:
-            # Could add more checks here
             pass
 
         return HealthResponse(

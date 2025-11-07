@@ -18,7 +18,7 @@ class AnalistaRAG(BaseAgent):
             system_prompt=ANALISTA_RAG_PROMPT,
             modelo=AGENT_MODELS[AgentRole.ANALISTA_RAG],
             temperature=AGENT_TEMPERATURES[AgentRole.ANALISTA_RAG],
-            max_tokens=220, 
+            max_tokens=220,
             llm_client=llm_client
         )
         self.rag_retriever = rag_retriever
