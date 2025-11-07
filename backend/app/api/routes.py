@@ -29,17 +29,12 @@ from app.rag.retriever import RAGRetriever
 
 logger = logging.getLogger(__name__)
 
-# Create router
 router = APIRouter()
 
-# Global state for debates (in-memory for MVP)
-# In production, use Redis or database
 debates_activos: Dict[str, Dict[str, Any]] = {}
 
-# Global instances (initialized in main.py)
 llm_client: LLMClient = None
 rag_retriever: RAGRetriever = None
-
 
 def inicializar_dependencias(client: LLMClient, retriever: RAGRetriever):
     """Initialize global dependencies."""
@@ -128,15 +123,11 @@ async def ejecutar_debate_background(debate_id: str):
 
         logger.info(f"Starting background execution for debate: {debate_id}")
 
-        # Execute complete debate
-        # IMPORTANT: Yield control to event loop after each argument
-        # so the SSE stream can send them in real-time
         argumento_count = 0
         for argumento in orquestador.ejecutar_debate_completo():
             argumento_count += 1
             logger.debug(f"Generated argument #{argumento_count} from {argumento.get('agente', 'unknown')}")
 
-            # Yield control to event loop to allow SSE stream to send this argument
             await asyncio.sleep(0.1)
 
         debate_info["status"] = "completado"
@@ -184,7 +175,7 @@ async def stream_debate(debate_id: str):
             while not debate_info.get("en_ejecucion") and debate_info.get("status") != "completado":
                 await asyncio.sleep(0.5)
                 wait_count += 1
-                if wait_count % 2 == 0:  # Every second
+                if wait_count % 2 == 0:
                     logger.debug(f"Waiting for execution to start (debate: {debate_id})")
                     yield {
                         "event": "waiting",

@@ -24,7 +24,7 @@ class BaseAgent:
         system_prompt: str,
         modelo: str = None,
         temperature: float = None,
-        max_tokens: int = None,  # <-- El usuario puede sobreescribir esto
+        max_tokens: int = None, 
         llm_client: LLMClient = None
     ):
         """
@@ -46,17 +46,8 @@ class BaseAgent:
         self.system_prompt = system_prompt
         self.modelo = modelo or settings.model_gemini
         self.temperature = temperature if temperature is not None else settings.temperature_default
-        
-        # --- CAMBIO CLAVE ---
-        # 'max_tokens' pasado en el constructor (ej. max_tokens=250) tiene prioridad.
-        # Si no se pasa (es None), usamos un default de 180.
-        # 180 es un límite seguro para los prompts de ~110-120 palabras.
-        # El valor anterior (settings.max_tokens_per_argument, ~250) era demasiado alto
-        # y causaba los cortes.
         sensible_default_tokens = 180 
         self.max_tokens = max_tokens or sensible_default_tokens
-        # ---------------------
-
         self.llm_client = llm_client or LLMClient()
 
         # Agent's own intervention history
@@ -131,7 +122,6 @@ class BaseAgent:
                 "2. CUMPLE ESE LÍMITE (ej. 'MÁX 110 palabras').\n"
                 "3. ASEGÚRATE de terminar tu respuesta con una oración completa y un punto final. No dejes ideas a medias."
             )
-            # ---------------------
 
             user_message = "\n".join(user_message_parts)
 
@@ -151,7 +141,7 @@ class BaseAgent:
                 model=self.modelo,
                 messages=messages,
                 temperature=self.temperature,
-                max_tokens=self.max_tokens  # <-- Ahora usa el límite de 180 (o el que se pasó)
+                max_tokens=self.max_tokens
             )
 
             # Store in history
@@ -159,9 +149,8 @@ class BaseAgent:
 
             logger.info(f"Agent {self.nombre} generated argument ({len(response)} chars)")
 
-            # Limpieza simple para remover frases cortadas (aunque ahora debería ser raro)
+            # Limpieza simple para remover frases cortadas
             if not response.endswith(('.', '?', '!', '"', ']', '}')):
-                # Si no termina en puntuación, busca la última oración completa
                 last_punctuation = max(response.rfind('.'), response.rfind('?'), response.rfind('!'))
                 if last_punctuation != -1:
                     response = response[:last_punctuation + 1]

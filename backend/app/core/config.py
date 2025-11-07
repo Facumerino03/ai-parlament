@@ -11,18 +11,18 @@ import os
 class Settings(BaseSettings):
     """Application settings loaded from environment variables."""
 
-    # OpenRouter API Configuration
-    openrouter_api_key: str
-    openrouter_base_url: str = "https://openrouter.ai/api/v1"
+    # Groq API Configuration (previously OpenRouter)
+    openrouter_api_key: str  # Variable name kept for compatibility
+    openrouter_base_url: str = "https://api.groq.com/openai/v1"
 
-    # LLM Models
-    model_gemini: str = "google/gemini-flash-1.5"
-    model_llama: str = "meta-llama/llama-3.1-8b-instruct"
+    # LLM Models (Groq)
+    model_gemini: str = "llama-3.3-70b-versatile"  # Variable name kept for compatibility (complex agents)
+    model_llama: str = "llama-3.1-8b-instant"  # Fast model for simple agents
 
     # Server Configuration
     host: str = "0.0.0.0"
     port: int = 8000
-    debug: bool = True
+    debug: bool = False
 
     # RAG Configuration
     chroma_persist_dir: str = "./chroma_db"
@@ -30,13 +30,13 @@ class Settings(BaseSettings):
     rag_top_k: int = 5
 
     # Debate Configuration
-    default_rounds: int = 5
-    max_tokens_per_argument: int = 500
+    default_rounds: int = 3  # Reduced to respect Groq rate limits
+    max_tokens_per_argument: int = 180  # Short, concise arguments
     temperature_default: float = 0.7
 
-    # Rate Limiting
-    api_call_delay: float = 0.5
-    max_retries: int = 3
+    # Rate Limiting (Groq: 1K RPM for 70b, 14.4K RPM for 8b)
+    api_call_delay: float = 2.5  # Seconds between API calls to stay under 1K RPM
+    max_retries: int = 2
 
     model_config = SettingsConfigDict(
         env_file=".env",

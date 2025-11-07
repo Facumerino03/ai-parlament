@@ -16,5 +16,6 @@ class Secretario(BaseAgent):
             system_prompt=SECRETARIO_PROMPT,
             modelo=AGENT_MODELS[AgentRole.SECRETARIO],
             temperature=AGENT_TEMPERATURES[AgentRole.SECRETARIO],
+            max_tokens=250,
             llm_client=llm_client
         )

@@ -16,5 +16,6 @@ class Sintetizador(BaseAgent):
             system_prompt=SINTETIZADOR_PROMPT,
             modelo=AGENT_MODELS[AgentRole.SINTETIZADOR],
             temperature=AGENT_TEMPERATURES[AgentRole.SINTETIZADOR],
+            max_tokens=300,
             llm_client=llm_client
         )
