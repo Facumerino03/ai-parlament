@@ -8,7 +8,7 @@ Backend del sistema de Parlamento Virtual de Debates - Un sistema donde múltipl
 - **Sistema RAG**: Base de conocimiento vectorial con ChromaDB para fundamentar argumentos
 - **API REST**: Endpoints para crear y gestionar debates
 - **Streaming en Tiempo Real**: Server-Sent Events para seguir debates en vivo
-- **LLMs Gratuitos**: Usa Google Gemini Flash 1.5 y Meta Llama 3.1 vía OpenRouter
+- **LLMs Potentes y Rápidos**: Llama 3.3 70B y Llama 3.1 8B vía Groq API (gratuito)
 
 ## 🏗️ Arquitectura
 
@@ -28,8 +28,8 @@ backend/
 
 ## 📦 Requisitos
 
-- **Python**: 3.10 o superior
-- **OpenRouter API Key**: Gratuita en [https://openrouter.ai/](https://openrouter.ai/)
+- **Python**: 3.10, 3.11 o 3.12 (⚠️ **NO usar 3.13+**, tiene incompatibilidades con dependencias)
+- **Groq API Key**: Gratuita en [https://console.groq.com/](https://console.groq.com/)
 - **Espacio en Disco**: ~2GB para ChromaDB
 - **RAM**: Mínimo 4GB recomendado
 
@@ -66,21 +66,26 @@ pip install -r requirements.txt
 # Copiar archivo de ejemplo
 cp .env.example .env
 
-# Editar .env y añadir tu API key de OpenRouter
+# Editar .env y añadir tu API key de Groq
 nano .env  # o tu editor preferido
 ```
 
 **Contenido mínimo de `.env`:**
 ```env
-OPENROUTER_API_KEY=tu_api_key_aqui
+OPENROUTER_API_KEY=gsk_tu_groq_api_key_aqui
+OPENROUTER_BASE_URL=https://api.groq.com/openai/v1
+MODEL_GEMINI=llama-3.3-70b-versatile
+MODEL_LLAMA=llama-3.1-8b-instant
 ```
 
-### 5. Obtener API Key de OpenRouter
+**Nota:** La variable se llama `OPENROUTER_API_KEY` por compatibilidad con el código, pero usa tu Groq API key.
 
-1. Visita [https://openrouter.ai/](https://openrouter.ai/)
+### 5. Obtener API Key de Groq
+
+1. Visita [https://console.groq.com/](https://console.groq.com/)
 2. Crea una cuenta (gratis)
-3. Ve a "Keys" y genera una nueva API key
-4. Copia la key y pégala en tu archivo `.env`
+3. Ve a "API Keys" y genera una nueva key
+4. Copia la key (empieza con `gsk_`) y pégala en tu archivo `.env`
 
 ## ▶️ Ejecución
 
@@ -219,8 +224,69 @@ El sistema RAG (Retrieval-Augmented Generation) permite a los agentes fundamenta
 
 ### Agregar Documentos
 
-1. Coloca archivos `.txt` o `.md` en `app/rag/data/{categoria}/`
-2. Reinicia el servidor (o la próxima vez que se inicialice se cargarán)
+**Formatos soportados:** `.txt` y `.md`
+
+#### Método 1: Agregar y Reiniciar (Recomendado)
+
+1. **Crear archivo** en la carpeta correspondiente:
+```bash
+# Ejemplos:
+backend/app/rag/data/estudios/mi_estudio.txt
+backend/app/rag/data/estadisticas/datos_nuevos.md
+backend/app/rag/data/casos_historicos/caso_historico.txt
+backend/app/rag/data/falacias/nueva_falacia.md
+```
+
+2. **Eliminar base de datos** para forzar recarga:
+```bash
+# Desde la raíz del proyecto
+rm -rf backend/chroma_db
+```
+
+3. **Reiniciar el backend** - se indexan automáticamente:
+```bash
+cd backend
+python main.py
+```
+
+Los logs mostrarán:
+```
+INFO: Loaded document: mi_estudio.txt
+INFO: Total documents loaded: 8
+```
+
+#### Formato Recomendado para Documentos
+
+**Estudios:**
+```
+Estudio: [Título]
+
+Fuente: [Institución/Autores]
+Año: [2024]
+
+Metodología: [Descripción]
+
+Resultados Clave:
+1. [Resultado con datos concretos]
+2. [Resultado con porcentajes]
+
+Conclusiones: [Conclusión principal]
+```
+
+**Estadísticas:**
+```
+Estadísticas: [Tema]
+
+Fuente: [Organización]
+Año: [2024]
+
+Datos:
+- Métrica 1: XX%
+- Métrica 2: $XX millones
+- Métrica 3: XX personas
+
+Contexto: [Explicación breve]
+```
 
 Los documentos se indexan automáticamente con embeddings y se almacenan en ChromaDB.
 
@@ -231,15 +297,18 @@ Los documentos se indexan automáticamente con embeddings y se almacenan en Chro
 Puedes personalizar en `.env`:
 
 ```env
-# LLM
-OPENROUTER_API_KEY=tu_key
-MODEL_GEMINI=google/gemini-flash-1.5
-MODEL_LLAMA=meta-llama/llama-3.1-8b-instruct
+# Groq API
+OPENROUTER_API_KEY=gsk_tu_groq_api_key
+OPENROUTER_BASE_URL=https://api.groq.com/openai/v1
+
+# LLM Models (Groq)
+MODEL_GEMINI=llama-3.3-70b-versatile
+MODEL_LLAMA=llama-3.1-8b-instant
 
 # Servidor
 HOST=0.0.0.0
 PORT=8000
-DEBUG=True
+DEBUG=False
 
 # RAG
 CHROMA_PERSIST_DIR=./chroma_db
@@ -247,21 +316,25 @@ EMBEDDING_MODEL=all-MiniLM-L6-v2
 RAG_TOP_K=5
 
 # Debate
-DEFAULT_ROUNDS=5
-MAX_TOKENS_PER_ARGUMENT=500
+DEFAULT_ROUNDS=3
+MAX_TOKENS_PER_ARGUMENT=180
 TEMPERATURE_DEFAULT=0.7
 
-# Rate Limiting
-API_CALL_DELAY=0.5
-MAX_RETRIES=3
+# Rate Limiting (Groq: 1K RPM para 70b, 14.4K RPM para 8b)
+API_CALL_DELAY=2.5
+MAX_RETRIES=2
 ```
 
 ### Modelos LLM
 
-Por defecto usa modelos gratuitos/baratos de OpenRouter:
+Usa modelos de Groq (gratuitos y ultra-rápidos):
 
-- **Gemini Flash 1.5**: Moderador, Economista, Ético, Analista RAG, Sintetizador
-- **Llama 3.1 8B**: Otros agentes
+- **Llama 3.3 70B Versatile**: Moderador, Economista, Ético, Analista RAG, Sintetizador (agentes complejos)
+- **Llama 3.1 8B Instant**: Sociólogo, Científico, Ambientalista, Pragmático, Crítico, Secretario (agentes rápidos)
+
+**Límites de Groq:**
+- llama-3.3-70b-versatile: 1,000 RPM (30 RPD)
+- llama-3.1-8b-instant: 14,400 RPM (14,400 RPD)
 
 Puedes cambiar los modelos en `app/core/config.py` en `AGENT_MODELS`.
 
@@ -285,10 +358,41 @@ Nivel de logging configurableclase con `DEBUG=True/False` en `.env`.
 
 ## 🐛 Troubleshooting
 
+### Error con Python 3.13+
+
+**Problema:** Errores durante `pip install` o al importar dependencias
+
+**Síntomas:**
+```
+ERROR: Could not build wheels for hnswlib, chroma-hnswlib
+error: Microsoft Visual C++ 14.0 or greater is required
+```
+
+**Solución:**
+1. Verifica tu versión de Python:
+```bash
+python --version
+```
+
+2. Si usás Python 3.13+, **desinstalalo** e instalá Python 3.12:
+   - Descargá desde [python.org/downloads](https://www.python.org/downloads/)
+   - Instalá Python 3.12.x
+   - Recreá el entorno virtual con Python 3.12
+
+3. Crea nuevo entorno virtual:
+```bash
+python -m venv venv
+source venv/bin/activate  # Windows: venv\Scripts\activate
+pip install -r requirements.txt
+```
+
+**Por qué:** ChromaDB (especialmente `hnswlib` y `chroma-hnswlib`) aún no soporta Python 3.13 debido a cambios en la API de C.
+
 ### Error: "OpenRouter API key is required"
 
-- Verifica que `.env` existe y contiene `OPENROUTER_API_KEY`
-- La API key debe ser válida
+- Verifica que `.env` existe y contiene `OPENROUTER_API_KEY` con tu Groq API key
+- La API key debe empezar con `gsk_` (formato de Groq)
+- Verifica que `OPENROUTER_BASE_URL=https://api.groq.com/openai/v1`
 
 ### Error: "ChromaDB no inicializa"
 
@@ -303,56 +407,15 @@ Cambia el puerto en `.env`:
 PORT=8080
 ```
 
-### Rate Limits de OpenRouter
+### Rate Limits de Groq
 
-Si recibes errores 429:
-- Aumenta `API_CALL_DELAY` en `.env`
-- Los modelos gratuitos tienen límites generosos pero existen
-- Considera usar API key con créditos si necesitas mayor throughput
+Si recibes errores 429 (Too Many Requests):
+- Aumenta `API_CALL_DELAY` en `.env` (default: 2.5s)
+- Verifica que no estés excediendo 1K RPM para el modelo 70b
+- Considera reducir `DEFAULT_ROUNDS` a 2 si es necesario
 
-## 📊 Performance
+### Error: "model_decommissioned"
 
-- **Debate típico (5 rondas, 7 agentes)**: ~2-5 minutos
-- **Argumentos generados**: ~25-35
-- **Tokens consumidos**: ~15,000-25,000
-- **Costo con modelos gratuitos**: $0.00
-
-## 🔐 Consideraciones de Seguridad
-
-- **API Keys**: Nunca subas tu `.env` al repositorio
-- **CORS**: Configurado para localhost por defecto
-- **Rate Limiting**: Implementado a nivel de cliente LLM
-- **Validación**: Todos los inputs validados con Pydantic
-
-## 🚧 Limitaciones Conocidas
-
-- **Estado en Memoria**: Los debates se pierden al reiniciar el servidor (se puede implementar persistencia con Redis/DB)
-- **Concurrencia**: Limitada a ~10 debates simultáneos (configurable)
-- **Context Length**: Debates muy largos pueden exceder límites de contexto del LLM
-
-## 🤝 Contribuir
-
-1. Fork el repositorio
-2. Crea una rama (`git checkout -b feature/amazing-feature`)
-3. Commit tus cambios (`git commit -m 'Add amazing feature'`)
-4. Push a la rama (`git push origin feature/amazing-feature`)
-5. Abre un Pull Request
-
-## 📄 Licencia
-
-[Especificar licencia]
-
-## 📧 Contacto
-
-[Información de contacto]
-
-## 🙏 Agradecimientos
-
-- OpenRouter por acceso a LLMs gratuitos
-- Sentence-Transformers por embeddings de calidad
-- ChromaDB por vector store eficiente
-
----
-
-**Versión**: 1.0.0
-**Última actualización**: 2024-11-06
+- Verifica que estés usando modelos actuales de Groq
+- Modelos válidos: `llama-3.3-70b-versatile`, `llama-3.1-8b-instant`
+- Consulta [https://console.groq.com/docs/models](https://console.groq.com/docs/models)

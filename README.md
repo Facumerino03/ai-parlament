@@ -16,7 +16,7 @@ Un sistema que simula un parlamento donde múltiples agentes de IA debaten sobre
 - 📊 **Identificación Automática** de consensos, disensos y propuestas híbridas
 - 📄 **Generación de Actas** formales con transcripción completa
 - 🎨 **Interfaz Moderna** y responsive con visualización tipo hemiciclo
-- 💰 **Modelos Gratuitos** (Google Gemini Flash 1.5 + Meta Llama 3.1 8B)
+- 💰 **Modelos Gratuitos y Ultra-Rápidos** (Llama 3.3 70B + Llama 3.1 8B vía Groq)
 
 ## 🎬 Demo Rápido
 
@@ -25,7 +25,7 @@ Un sistema que simula un parlamento donde múltiples agentes de IA debaten sobre
 cd backend
 pip install -r requirements.txt
 cp .env.example .env
-# Editar .env con tu OPENROUTER_API_KEY
+# Editar .env con tu GROQ_API_KEY (empieza con gsk_)
 python main.py
 
 # Terminal 2: Frontend
@@ -43,9 +43,9 @@ npm run dev
 ### Backend (Python)
 - **FastAPI** para API REST
 - **ChromaDB** para vector store y RAG
-- **OpenRouter** para acceso a LLMs (Gemini + Llama)
+- **Groq API** para acceso ultra-rápido a LLMs (Llama 3.3 70B + Llama 3.1 8B)
 - **Sentence-Transformers** para embeddings
-- **Server-Sent Events** para streaming
+- **Server-Sent Events** para streaming en tiempo real
 
 ### Frontend (React + TypeScript)
 - **React 18** + **TypeScript**
@@ -61,7 +61,7 @@ ai-parlament/
 │   │   ├── agents/   # 11 agentes especializados
 │   │   ├── api/      # REST endpoints
 │   │   ├── core/     # Orquestador y estado
-│   │   ├── llm/      # Cliente OpenRouter
+│   │   ├── llm/      # Cliente LLM (Groq)
 │   │   └── rag/      # Sistema RAG + documentos
 │   ├── tests/
 │   ├── main.py
@@ -108,21 +108,17 @@ ai-parlament/
    - Cada agente presenta su postura inicial
    - Fundamentan con información del RAG
 
-3. **Debate Libre** (5 rondas)
-   - Agentes responden y contraargumentan
+3. **Debate Libre** (3 rondas)
+   - Agentes responden entre sí directamente
    - Moderador identifica puntos de tensión
-   - Crítico señala falacias
+   - Crítico señala falacias cuando detecta errores lógicos
 
-4. **Interpelaciones**
-   - Moderador genera preguntas clave
-   - Respuestas dirigidas y obligatorias
-
-5. **Síntesis**
+4. **Síntesis**
    - Sintetizador analiza todo el debate
    - Identifica consensos y disensos
    - Propone soluciones híbridas
 
-6. **Resultado**
+5. **Resultado**
    - Acta completa descargable
    - Resumen ejecutivo
    - Conclusiones balanceadas
@@ -131,9 +127,9 @@ ai-parlament/
 
 ### Requisitos Previos
 
-- Python 3.10+
+- **Python 3.10 - 3.12** (⚠️ Python 3.13+ no es compatible por dependencias)
 - Node.js 18+
-- OpenRouter API Key (gratuita en https://openrouter.ai/)
+- Groq API Key (gratuita en https://console.groq.com/)
 
 ### Backend Setup
 
@@ -149,14 +145,13 @@ pip install -r requirements.txt
 
 # Configurar API key
 cp .env.example .env
-# Editar .env y añadir: OPENROUTER_API_KEY=tu_key_aqui
+# Editar .env y añadir tu Groq API key (empieza con gsk_)
 
 # Iniciar servidor
 python main.py
 ```
 
 Backend disponible en: **http://localhost:8000**
-Documentación API: **http://localhost:8000/docs**
 
 ### Frontend Setup
 
@@ -204,34 +199,36 @@ Obtener análisis balanceados para decisiones importantes
 
 ### Cambiar Modelos LLM
 
-En `backend/app/core/config.py`:
-```python
-AGENT_MODELS = {
-    AgentRole.MODERADOR: "google/gemini-flash-1.5",
-    AgentRole.ECONOMISTA: "meta-llama/llama-3.1-8b-instruct",
-    # ... personalizar aquí
-}
+En `backend/.env`:
+```env
+MODEL_GEMINI=llama-3.3-70b-versatile  # Modelo complejo
+MODEL_LLAMA=llama-3.1-8b-instant      # Modelo rápido
 ```
 
 ### Agregar Documentos al RAG
 
 1. Coloca archivos `.txt` o `.md` en `backend/app/rag/data/{categoria}/`
-2. Categorías: estudios, estadisticas, casos_historicos, falacias
-3. Reinicia el servidor para indexar
+2. Categorías: `estudios`, `estadisticas`, `casos_historicos`, `falacias`
+3. Elimina `backend/chroma_db/` para forzar recarga
+4. Reinicia el backend para indexar automáticamente
 
-### Personalizar Colores de Agentes
-
-En `frontend/src/App.tsx`:
-```typescript
-const AGENTES_INFO: Record<string, AgenteInfo> = {
-  economista: {
-    color: 'bg-green-500',  // Cambiar aquí
-    // ...
-  }
-}
-```
+Ver [Backend README](./backend/README.md#agregar-documentos) para más detalles.
 
 ## 🐛 Troubleshooting
+
+### Error con Python 3.13+
+
+**Problema:** Errores de instalación o incompatibilidad con dependencias
+
+**Solución:**
+1. Desinstala Python 3.13
+2. Instala Python 3.12 desde [python.org/downloads](https://www.python.org/downloads/)
+3. Verifica la versión:
+```bash
+python --version  # Debe mostrar 3.10.x, 3.11.x o 3.12.x
+```
+
+**Razón:** ChromaDB y algunas dependencias de sentence-transformers aún no son compatibles con Python 3.13.
 
 ### Backend no inicia
 
@@ -251,14 +248,19 @@ pip install --upgrade chromadb sentence-transformers
 2. Revisa CORS en `backend/main.py`
 3. Verifica `VITE_API_URL` en `frontend/.env`
 
-### Rate Limiting de OpenRouter
+### Rate Limiting de Groq
 
-**Problema:** Muchos requests 429
+**Problema:** Errores 429 (Too Many Requests)
 
 **Solución:**
-Aumenta `API_CALL_DELAY` en `backend/.env`:
+1. El delay actual es 2.5s (respeta límite de 1K RPM para 70b)
+2. Si persiste, aumenta en `backend/.env`:
 ```env
-API_CALL_DELAY=1.0
+API_CALL_DELAY=3.0
+```
+3. O reduce rondas:
+```env
+DEFAULT_ROUNDS=2
 ```
 
 ### SSE se desconecta
@@ -269,60 +271,6 @@ API_CALL_DELAY=1.0
 1. Revisa logs del backend por errores
 2. Verifica estabilidad de red
 3. Aumenta timeouts si necesario
-
-## 📊 Estadísticas del Proyecto
-
-- **Backend**: 43 archivos, ~5,200 líneas de código
-- **Frontend**: 20 archivos, ~1,500 líneas de código
-- **Total**: 63 archivos, ~6,700 líneas de código
-- **Agentes**: 11 especializados
-- **Documentos RAG**: 7 ejemplos en 4 categorías
-- **API Endpoints**: 8 principales
-- **Tests**: 9 tests básicos
-
-## 🤝 Contribuir
-
-1. Fork el repositorio
-2. Crea tu rama (`git checkout -b feature/AmazingFeature`)
-3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
-4. Push a la rama (`git push origin feature/AmazingFeature`)
-5. Abre un Pull Request
-
-## 🔐 Consideraciones Éticas
-
-Este sistema es una **herramienta de exploración** que:
-- ✅ Ayuda a analizar temas desde múltiples perspectivas
-- ✅ Genera insights valiosos para toma de decisiones
-- ❌ NO reemplaza análisis humano crítico
-- ❌ NO es apto para decisiones legales, médicas o financieras certificadas
-- ⚠️ Puede tener sesgos inherentes de los LLMs subyacentes
-
-**Disclaimer:** Las conclusiones generadas deben ser evaluadas críticamente por humanos antes de tomar decisiones importantes.
-
-## 📄 Licencia
-
-[Especificar licencia]
-
-## 🙏 Agradecimientos
-
-- **OpenRouter** - Acceso a LLMs gratuitos
-- **Anthropic Claude** - Asistencia en desarrollo
-- **shadcn/ui** - Componentes UI de calidad
-- **FastAPI** - Framework backend eficiente
-- **Vite** - Build tool ultra-rápido
-
-## 📧 Contacto
-
-[Información de contacto]
-
----
-
-**Versión**: 1.0.0
-**Última actualización**: 2024-11-06
-
-Construido con ❤️ usando Python, React, y IA de vanguardia
-
----
 
 ## 🚀 Quick Start
 
@@ -335,7 +283,7 @@ cd ai-parlament
 cd backend
 pip install -r requirements.txt
 cp .env.example .env
-# Editar .env con OPENROUTER_API_KEY
+# Editar .env con tu Groq API key (gsk_...)
 python main.py &
 
 # 3. Frontend
@@ -343,5 +291,5 @@ cd ../frontend
 npm install
 npm run dev
 
-# 4. Abrir http://localhost:5173 y disfrutar! 🎉
+# 4. Abrir http://localhost:5173 y listo!
 ```
